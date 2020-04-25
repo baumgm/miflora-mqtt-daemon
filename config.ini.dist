@@ -28,6 +28,9 @@
 # The bluetooth adapter that should be used to connect to Mi Flora devices (Default: hci0)
 #adapter = hci0
 
+# source of the information
+#source = unkown
+
 [Daemon]
 
 # Enable or Disable an endless execution loop (Default: true)

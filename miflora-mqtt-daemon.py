@@ -102,6 +102,7 @@ except IOError:
 reporting_mode = config['General'].get('reporting_method', 'mqtt-json')
 used_adapter = config['General'].get('adapter', 'hci0')
 daemon_enabled = config['Daemon'].getboolean('enabled', True)
+source = config['General'].get('source', 'unkown')
 
 if reporting_mode == 'mqtt-homie':
     default_base_topic = 'homie'
@@ -351,6 +352,12 @@ while True:
         print_line('Result: {}'.format(json.dumps(data)))
 
         if reporting_mode == 'mqtt-json':
+            data['firmware'] = flora['firmware']
+            data['mac'] = flora['mac']
+            data['success'] = flora['stats']['success']
+            data['count'] = flora['stats']['count']
+            data['rate'] = '{:.0}'.format(flora['stats']['success']/flora['stats']['count'])
+            data['source'] = source
             print_line('Publishing to MQTT topic "{}/{}"'.format(base_topic, flora_name))
             mqtt_client.publish('{}/{}'.format(base_topic, flora_name), json.dumps(data))
             sleep(0.5) # some slack for the publish roundtrip and callback function
